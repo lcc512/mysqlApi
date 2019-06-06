@@ -9,3 +9,7 @@
 ##进度
 - 已完成视频所有内容
 
+##命令
+- git push https://github.com/lcc512/2019-cms-api.git master
+- forever app.js
+- 端口3005
