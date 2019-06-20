@@ -1,15 +1,19 @@
-#项目学习课程 服务端
+#通用操作mysql 服务端 api
 
 ##应用技术
 - 数据库 Mysql，
 - http服务 express
 - Nginx服务
-- 三丰云
+- 腾讯云
 
-##进度
-- 已完成视频所有内容
+##文件组织
+- 待补充
+
+##已使用
+- 手机录入信息收集和展示
+    - mobile-app
 
 ##命令
-- git push https://github.com/lcc512/2019-cms-api.git master
+- git push https://github.com/lcc512/mysql-api.git master
 - forever app.js
-- 端口3005
+- 端口3006

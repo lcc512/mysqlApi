@@ -1,5 +1,5 @@
 const moment = require('moment')
-const db = require('../models/db')
+const db = require('../../models//db')
 
 exports.list = async (req, res, next) => {
 
@@ -19,21 +19,21 @@ exports.list = async (req, res, next) => {
       _limit = 20
     }
 
-    const sqlStr = `select * from topics 
+    const sqlStr = `select * from baseinfo 
                     order by id desc 
                     limit ${(_page - 1) * _limit},${_limit} `
 
     // 获取总条数
-    const sqlStrCount = `select count(*) as topicsCount from topics`
+    const sqlStrCount = `select count(*) as baseinfoCount from baseinfo`
 
-    const topics = await db.query(sqlStr)
-    const [{topicsCount}] = await db.query(sqlStrCount)
+    const baseinfos = await db.query(sqlStr)
+    const [{baseinfoCount}] = await db.query(sqlStrCount)
 
     res.status(200).json({
-      topics,
-      topicsCount
+      baseinfos,
+      baseinfoCount
     })
-    
+
     // console.log(topics)
 
   } catch (err) {
@@ -42,15 +42,17 @@ exports.list = async (req, res, next) => {
 
 }
 
+
 exports.one = async (req, res, next) => {
 
   try {
 
-    const {id} = req.params
-    const sqlStr = `select * from topics where id='${id}'`
-    const topic = await db.query(sqlStr)
+    const {phoneNumber} = req.params
 
-    res.status(200).json(topic[0])
+    const sqlStr = `select * from baseinfo where phoneNumber='${phoneNumber}'`
+    const baseInfo = await db.query(sqlStr)
+
+    res.status(200).json(baseInfo[0])
 
   } catch (err) {
     next(err)
@@ -65,17 +67,25 @@ exports.create = async (req, res, next) => {
 
     // console.log(req.body)
     const body = req.body
-    body.user_id = req.session.user.id
-    const sqlStr = `insert into topics (title,user_id,content)
+    // body.user_id = req.session.user.id
+    const sqlStr = `insert into baseinfo (phoneNumber,userName,sex,birthday,
+    idClass,idNumber,degree,workDate,company,duty)
   values(
-  '${body.title}',
-  '${body.user_id}',
-  '${body.content}'
+  '${body.phoneNumber}',
+  '${body.userName}',
+  '${body.sex}',
+  '${body.birthday}',
+  '${body.idClass}',
+  '${body.idNumber}',
+  '${body.degree}',
+  '${body.workDate}',
+  '${body.company}',
+  '${body.duty}'
   )
   `
 
     const result = await db.query(sqlStr)
-    const [topic] = await db.query(`select * from topics where id='${result.insertId}'`)
+    const [topic] = await db.query(`select * from baseinfo where id='${result.insertId}'`)
 
     res.status(201).json(topic)
 
@@ -108,9 +118,9 @@ exports.destroy = async (req, res, next) => {
 
   try {
 
-    const {id} = req.params
+    const {phoneNumber} = req.params
 
-    const sqlStr = `delete from topics where id=${id}`
+    const sqlStr = `delete from baseinfo where phoneNumber=${phoneNumber}`
     const result = await db.query(sqlStr)
     res.status(201).json(result.affectedRows)
 

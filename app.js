@@ -16,7 +16,8 @@ app.use(session({
   saveIninitialized:false
 }))
 
-app.use(router)
+app.use('/mobileapp',router.routerMobileApp)
+// app.use('/api',router)
 
 // 统一处理500错误，用next方法，查看node最后讲的那些
 app.use((err,req,res,next)=>{
@@ -30,6 +31,6 @@ app.get('/',(req,res,next)=>{
   res.status(200).send('api server is running...')
 })
 
-app.listen(3005,()=>{
-  console.log('App is running at port 3005')
+app.listen(3006,()=>{
+  console.log('App is running at port 3006')
 })
