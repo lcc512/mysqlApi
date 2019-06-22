@@ -1,9 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const baseinfoController = require('../controllers/mobile-app/baseinfo')
-
-
+const articlesController = require('../controllers/myBlog/article')
 
 const db = require('../models/db')
 
@@ -57,7 +55,6 @@ async function checkTopicUser(req, res, next) {
  */
 router.get('/test',function () {
 
-
   console.log(1111111111111)
   const sqlStr = 'select * from test'
 
@@ -73,11 +70,11 @@ router.get('/test',function () {
 手机端用户基本信息
  */
 router
-  .get('/baseinfo', baseinfoController.list)
-  .get('/baseinfo/:phoneNumber', baseinfoController.one)
-  .post('/baseinfo', baseinfoController.create)
-  .patch('/baseinfo/:id', baseinfoController.update)
-  .delete('/baseinfo/:phoneNumber', baseinfoController.destroy)
+  .get('/article', articlesController.list)
+  .get('/article/:id', articlesController.one)
+  .post('/article', articlesController.create)
+  .patch('/article/:id', articlesController.update)
+  .delete('/article/:id', articlesController.destroy)
 
 
 module.exports = router

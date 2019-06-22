@@ -12,8 +12,11 @@
 ##已使用
 - 手机录入信息收集和展示
     - mobile-app
+- 个人博客
+    - myBlog
 
 ##命令
-- git push https://github.com/lcc512/mysql-api.git master
+- git push https://github.com/lcc512/mysqlApi.git master
+- git clone https://github.com/lcc512/mysqlApi.git
 - forever app.js
-- 端口3006
+- 端口3333

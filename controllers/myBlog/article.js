@@ -19,19 +19,19 @@ exports.list = async (req, res, next) => {
       _limit = 20
     }
 
-    const sqlStr = `select * from baseinfo 
+    const sqlStr = `select * from articles 
                     order by id desc 
                     limit ${(_page - 1) * _limit},${_limit} `
 
     // 获取总条数
-    const sqlStrCount = `select count(*) as baseinfoCount from baseinfo`
+    const sqlStrCount = `select count(*) as articlesCount from articles`
 
-    const baseinfos = await db.query(sqlStr)
-    const [{baseinfoCount}] = await db.query(sqlStrCount)
+    const articles = await db.query(sqlStr)
+    const [{articlesCount}] = await db.query(sqlStrCount)
 
     res.status(200).json({
-      baseinfos,
-      baseinfoCount
+      articles,
+      articlesCount
     })
 
     // console.log(topics)
@@ -47,9 +47,9 @@ exports.one = async (req, res, next) => {
 
   try {
 
-    const {phoneNumber} = req.params
+    const {id} = req.params
 
-    const sqlStr = `select * from baseinfo where phoneNumber='${phoneNumber}'`
+    const sqlStr = `select * from articles where id='${id}'`
     const baseInfo = await db.query(sqlStr)
 
     res.status(200).json(baseInfo[0])
@@ -68,24 +68,15 @@ exports.create = async (req, res, next) => {
     // console.log(req.body)
     const body = req.body
     // body.user_id = req.session.user.id
-    const sqlStr = `insert into baseinfo (phoneNumber,userName,sex,birthday,
-    idClass,idNumber,degree,workDate,company,duty)
+    const sqlStr = `insert into articles (title,content)
   values(
-  '${body.phoneNumber}',
-  '${body.userName}',
-  '${body.sex}',
-  '${body.birthday}',
-  '${body.idClass}',
-  '${body.idNumber}',
-  '${body.degree}',
-  '${body.workDate}',
-  '${body.company}',
-  '${body.duty}'
+  '${body.title}',
+  '${body.content}'
   )
   `
 
     const result = await db.query(sqlStr)
-    const [topic] = await db.query(`select * from baseinfo where id='${result.insertId}'`)
+    const [topic] = await db.query(`select * from articles where id='${result.insertId}'`)
 
     res.status(201).json(topic)
 
@@ -101,7 +92,7 @@ exports.update = async (req, res, next) => {
     const body = req.body
     const {id} = req.params
 
-    const sqlStr = `update topics set title='${body.title}',content='${body.content}'
+    const sqlStr = `update articles set title='${body.title}',content='${body.content}'
     where id=${id}`
 
     const result = await db.query(sqlStr)
@@ -118,9 +109,9 @@ exports.destroy = async (req, res, next) => {
 
   try {
 
-    const {phoneNumber} = req.params
+    const {id} = req.params
 
-    const sqlStr = `delete from baseinfo where phoneNumber=${phoneNumber}`
+    const sqlStr = `delete from articles where id=${id}`
     const result = await db.query(sqlStr)
     res.status(201).json(result.affectedRows)
 

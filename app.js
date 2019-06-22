@@ -6,7 +6,6 @@ var bodyParser = require('body-parser')
 
 const app=express()
 
-
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
@@ -17,7 +16,7 @@ app.use(session({
 }))
 
 app.use('/mobileapp',router.routerMobileApp)
-// app.use('/api',router)
+app.use('/myBlog',router.routerMyBlog)
 
 // 统一处理500错误，用next方法，查看node最后讲的那些
 app.use((err,req,res,next)=>{
@@ -28,9 +27,9 @@ app.use((err,req,res,next)=>{
 })
 
 app.get('/',(req,res,next)=>{
-  res.status(200).send('api server is running...')
+  res.status(200).send('api server is running...222')
 })
 
-app.listen(3006,()=>{
-  console.log('App is running at port 3006')
+app.listen(3333,()=>{
+  console.log('App is running at port 3333')
 })
