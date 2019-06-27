@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const articlesController = require('../controllers/myBlog/article')
+const uploadFileController = require('../controllers/myBlog/uploadFile')
 
 const db = require('../models/db')
 
@@ -67,7 +68,7 @@ router.get('/test',function () {
 
 
 /*
-手机端用户基本信息
+文章路由
  */
 router
   .get('/article', articlesController.list)
@@ -75,6 +76,13 @@ router
   .post('/article', articlesController.create)
   .patch('/article/:id', articlesController.update)
   .delete('/article/:id', articlesController.destroy)
+
+
+/*
+上传文件
+ */
+router
+  .post('/uploadImg', uploadFileController.uploadImg)
 
 
 module.exports = router

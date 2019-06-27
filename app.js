@@ -6,7 +6,9 @@ var bodyParser = require('body-parser')
 
 const app=express()
 
-app.use(bodyParser.urlencoded({extended: false}))
+// app.use(bodyParser.urlencoded({extended: false}))
+// bodyPraser配置：上面是学习视频的，下面设置图片上传限制的
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000}))
 app.use(bodyParser.json())
 
 app.use(session({

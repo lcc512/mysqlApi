@@ -29,6 +29,15 @@ exports.list = async (req, res, next) => {
     const articles = await db.query(sqlStr)
     const [{articlesCount}] = await db.query(sqlStrCount)
 
+    articles.forEach(function (item) {
+
+      item.createTime=moment(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss')
+      item.updateTime=moment(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss')
+
+    })
+
+
+
     res.status(200).json({
       articles,
       articlesCount
@@ -52,7 +61,12 @@ exports.one = async (req, res, next) => {
     const sqlStr = `select * from articles where id='${id}'`
     const baseInfo = await db.query(sqlStr)
 
-    res.status(200).json(baseInfo[0])
+    const currentBaseInfo=baseInfo[0]
+
+    currentBaseInfo.createTime=moment(new Date(currentBaseInfo.createTime)).format('YYYY-MM-DD HH:mm:ss')
+    currentBaseInfo.updateTime=moment(new Date(currentBaseInfo.updateTime)).format('YYYY-MM-DD HH:mm:ss')
+
+    res.status(200).json(currentBaseInfo)
 
   } catch (err) {
     next(err)
@@ -65,13 +79,14 @@ exports.create = async (req, res, next) => {
 
   try {
 
-    // console.log(req.body)
+    console.log(req.body)
     const body = req.body
-    // body.user_id = req.session.user.id
-    const sqlStr = `insert into articles (title,content)
+
+    const sqlStr = `insert into articles (title,content,tagList)
   values(
   '${body.title}',
-  '${body.content}'
+  '${body.content}',
+  '${body.tagList}'
   )
   `
 
@@ -92,7 +107,10 @@ exports.update = async (req, res, next) => {
     const body = req.body
     const {id} = req.params
 
-    const sqlStr = `update articles set title='${body.title}',content='${body.content}'
+    const sqlStr = `update articles set 
+    title='${body.title}',
+    content='${body.content}',
+    tagList='${body.tagList}'
     where id=${id}`
 
     const result = await db.query(sqlStr)
