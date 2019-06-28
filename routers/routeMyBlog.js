@@ -3,6 +3,7 @@ const router = express.Router()
 
 const articlesController = require('../controllers/myBlog/article')
 const uploadFileController = require('../controllers/myBlog/uploadFile')
+const optionsController = require('../controllers/myBlog/options')
 
 const db = require('../models/db')
 
@@ -83,6 +84,14 @@ router
  */
 router
   .post('/uploadImg', uploadFileController.uploadImg)
+
+
+/*
+备选项
+ */
+router
+  .get('/options', optionsController.one)
+  .patch('/options', optionsController.update)
 
 
 module.exports = router
