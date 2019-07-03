@@ -8,7 +8,7 @@ exports.one = async (req, res, next) => {
 
     // const {id} = req.params
 
-    const sqlStr = `select * from myBlog_options where id=1`
+    const sqlStr = `select * from myblog_options where id=1`
     const options = await db.query(sqlStr)
 
     const currentOptions=options[0]
@@ -29,7 +29,7 @@ exports.update = async (req, res, next) => {
     const body = req.body
     // const {id} = req.params
 
-    const sqlStr = `update myBlog_options set tagAllList='${body.tagAllList}' where id=1`
+    const sqlStr = `update myblog_options set tagAllList='${body.tagAllList}' where id=1`
 
     const result = await db.query(sqlStr)
     res.status(201).json(result.affectedRows)

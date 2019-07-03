@@ -8,7 +8,7 @@ const app=express()
 
 // app.use(bodyParser.urlencoded({extended: false}))
 // bodyPraser配置：上面是学习视频的，下面设置图片上传限制的
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000}))
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000,uploadDir:'./uploads'}))
 app.use(bodyParser.json())
 
 app.use(session({
@@ -19,6 +19,8 @@ app.use(session({
 
 app.use('/mobileapp',router.routerMobileApp)
 app.use('/myBlog',router.routerMyBlog)
+
+
 
 // 统一处理500错误，用next方法，查看node最后讲的那些
 app.use((err,req,res,next)=>{

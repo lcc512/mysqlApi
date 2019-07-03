@@ -5,6 +5,11 @@ const articlesController = require('../controllers/myBlog/article')
 const uploadFileController = require('../controllers/myBlog/uploadFile')
 const optionsController = require('../controllers/myBlog/options')
 
+const multer = require('multer')
+const fs = require('fs')
+
+var COS = require('cos-nodejs-sdk-v5');
+
 const db = require('../models/db')
 
 
@@ -55,17 +60,11 @@ async function checkTopicUser(req, res, next) {
 /*
 测试api
  */
-router.get('/test',function () {
-
-  console.log(1111111111111)
+router.get('/test', function () {
   const sqlStr = 'select * from test'
-
-  const topics =  db.query(sqlStr)
-
+  const topics = db.query(sqlStr)
   console.log(topics)
-
 })
-
 
 
 /*
@@ -82,8 +81,68 @@ router
 /*
 上传文件
  */
-router
-  .post('/uploadImg', uploadFileController.uploadImg)
+// router
+//   .post('/uploadImg', uploadFileController.uploadImg)
+
+
+/*
+腾讯云上传文件，未封装
+ */
+
+// 腾讯云 COS 的使用
+
+var cos = new COS({
+  AppId: '1258668905',
+  SecretId: 'AKIDA88tpWVJL9iA7wgt0qTsDNK1ScU96haN',
+  SecretKey: 'qQkJfqkfkaBVs45sQlskZO9qTzpaDg0R',
+});
+
+var tengxun_cos = {
+  Bucket: 'myblog-1258668905',
+  Region: 'ap-beijing',
+}
+
+var upload = multer({dest: './tmp/'})
+
+
+// 图片上传
+router.post('/upload', upload.single('mark'), function (req, res, next) {
+  // 文件路径
+  var filePath = './' + req.file.path;
+  // 文件类型
+  var temp = req.file.originalname.split('.');
+  var fileType = temp[temp.length - 1];
+  var lastName = '.' + fileType;
+  // 构建图片名
+  var fileName = Date.now() + lastName;
+  // 图片重命名
+  fs.rename(filePath, fileName, (err) => {
+    if (err) {
+      res.end(JSON.stringify({status: '102', msg: '文件写入失败'}));
+    } else {
+      var localFile = './' + fileName;
+      var key = fileName;
+
+      // 腾讯云 文件上传
+      var params = {
+        Bucket: tengxun_cos.Bucket, /* 必须 */
+        Region: tengxun_cos.Region, /* 必须 */
+        Key: key, /* 必须 */
+        FilePath: localFile, /* 必须 */
+      }
+      cos.sliceUploadFile(params, function (err, data) {
+        if (err) {
+          fs.unlinkSync(localFile);
+          res.end(JSON.stringify({status: '101', msg: '上传失败', error: JSON.stringify(err)}));
+        } else {
+          fs.unlinkSync(localFile);
+          var imageSrc = 'https://myblog-1258668905.cos.ap-beijing.myqcloud.com/' + data.Key;
+          res.end(JSON.stringify({status: '100', msg: '上传成功', imageUrl: imageSrc}));
+        }
+      });
+    }
+  });
+})
 
 
 /*
