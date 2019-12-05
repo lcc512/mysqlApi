@@ -1,0 +1,16 @@
+define({
+  "name": "个人博客APIs",
+  "version": "0.0.1",
+  "description": "个人博客接口文档",
+  "title": "个人博客文档",
+  "url": "http://127.0.0.1:3333/",
+  "sampleUrl": false,
+  "defaultVersion": "0.0.0",
+  "apidoc": "0.3.0",
+  "generator": {
+    "name": "apidoc",
+    "time": "2019-12-05T02:46:19.105Z",
+    "url": "http://apidocjs.com",
+    "version": "0.19.0"
+  }
+});
